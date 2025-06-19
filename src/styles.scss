@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Qompac UI SCSS file. */
+@import 'assets/scss/qompac-ui.scss';
+@import 'assets/scss/custom.scss';
+@import 'assets/scss/dark.scss';
+@import 'assets/scss/rtl.scss';
+@import 'assets/scss/customizer.scss';
+
+
+// Custom Angular Style
+.dropdown-toggle.hide-toggler{
+  &::after {
+    content: unset;
+  }
+}

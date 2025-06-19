@@ -1,0 +1,31 @@
+<!-- loader Start -->
+<iq-loader></iq-loader>
+<!-- loader END -->
+<!-- Sidebar Start -->
+<aside iq-sidebar [class]="'sidebar sidebar-base ' + (sidebarColorSelector$ | async) + ' ' + (sidebarMenuStyleSelector$ | async) + ' ' + (sidebarTypeSelector$ | async).join(' ')" id="first-tour" data-toggle="main-sidebar" data-sidebar="responsive"></aside>
+<!-- Sidebar End -->
+<main class="main-content">
+  <div [class]="(isBanner ? 'position-relative iq-banner default' : 'position-relative default')" class="">
+    <!--Nav Start-->
+    <iq-header></iq-header>
+      <ng-template [ngIf]="isBanner">
+        <!-- Nav Header Component Start -->
+            <iq-sub-header></iq-sub-header>
+        <!-- Nav Header Component End -->
+      </ng-template>
+    <!--Nav End-->
+  </div>
+  <!-- Page Style Start -->
+  <div class="content-inner pb-0" [class]="(pageLayoutSelector$ | async)" id="page_layout">
+    <!-- Page Render Here -->
+    <router-outlet></router-outlet>
+    <!-- Page Render Here -->
+  </div>
+  <!-- Page Style Start -->
+  <!-- Footer Start -->
+  <!-- Footer Start -->
+  <!-- Live Customizer Start -->
+  <iq-setting-offcanvas></iq-setting-offcanvas>
+  <!-- Live Customizer End -->
+  <app-footer appName="RSE"></app-footer>
+</main>

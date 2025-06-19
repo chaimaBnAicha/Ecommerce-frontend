@@ -1,0 +1,80 @@
+<!--Nav Start-->
+<nav
+  class="nav navbar navbar-expand-xl fixed-top navbar-dark bg-dark iq-navbar iq-dual-compact"
+>
+  <div class="container-fluid navbar-inner">
+    <div class="d-flex justify-content-between w-100 align-items-center">
+      <button
+        data-trigger="navbar_main"
+        class="d-xl-none btn btn-primary rounded-pill p-1 pt-0 col-auto"
+        type="button"
+      >
+        <svg width="24px" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"
+          ></path>
+        </svg>
+      </button>
+      <div class="col-auto navbar-brand">
+        <a href="/" class="navbar-brand d-flex align-items-center ms-0">
+          <iq-brand-logo></iq-brand-logo>
+          <h4
+            class="logo-title text-light ms-3 mb-0 d-sm-block"
+            iq-brand-name
+          ></h4>
+        </a>
+      </div>
+
+      <nav
+        id="navbar_main"
+        class="mobile-offcanvas nav navbar navbar-expand-xl horizontal-nav col-auto bg-dark"
+      >
+        <div class="container-fluid">
+          <div class="offcanvas-header px-0">
+            <div class="navbar-brand ms-0">
+              <iq-brand-logo></iq-brand-logo>
+              <!-- <h4 class="logo-title" data-setting="app_name">{{ appName }}</h4> -->
+              <h4 class="logo-title" iq-brand-name></h4>
+            </div>
+            <button class="btn-close float-end text-white"></button>
+          </div>
+          <iq-horizontal-list></iq-horizontal-list>
+        </div>
+      </nav>
+
+      <div class="col-auto">
+        <iq-dualcompact-navbar></iq-dualcompact-navbar>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="nav-scroller bg-body shadow-sm">
+  <div class="container-fluid">
+    <nav class="nav nav-underline" aria-label="Secondary navigation">
+      <ul class="iq-nav-menu list-unstyled flex-row">
+        <li class="nav-item active">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            [routerLink]="['/dashboard']"
+            >Dashboard</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/analytics-dashboard']"
+            >Analytics</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/ecommerce-dashboard']"
+            >E-Commerce</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/crypto-dashboard']">Crypto</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

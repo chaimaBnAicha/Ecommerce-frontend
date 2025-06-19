@@ -1,0 +1,32 @@
+<nav class="nav navbar navbar-expand-xl navbar-light iq-navbar">
+  <div class="container-fluid navbar-inner">
+    <button data-trigger="navbar_main" (click)="open(content)"
+      class="d-xl-none btn btn-sm btn-primary btn-icon rounded-pill" type="button">
+      <span class="btn-inner">
+        <svg width="20px" height="20px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
+        </svg>
+      </span>
+    </button>
+    <div class="col-lg-2 col-lg-3 navbar-brand">
+      <a href="/" class="navbar-brand">
+        <iq-brand-logo [color]="true"></iq-brand-logo>
+        <h4 class="logo-title d-none d-sm-block" iq-brand-name></h4>
+      </a>
+    </div>
+    <iq-horizontal-list [responsiveList]="true"></iq-horizontal-list>
+    <iq-default-navbar></iq-default-navbar>
+    <ng-template #content let-offcanvas>
+      <div class="offcanvas-header">
+        <a href="/" class="navbar-brand d-flex align-items-center">
+          <iq-brand-logo [color]="true"></iq-brand-logo>
+          <h4 class="logo-title ms-3" iq-brand-name></h4>
+        </a>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+      </div>
+      <div class="offcanvas-body">
+        <iq-horizontal-list></iq-horizontal-list>
+      </div>
+    </ng-template>
+  </div>
+</nav>

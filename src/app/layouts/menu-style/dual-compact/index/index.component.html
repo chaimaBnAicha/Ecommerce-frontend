@@ -1,0 +1,21 @@
+<!-- loader Start -->
+<iq-loader></iq-loader>
+<!-- loader END -->
+<!-- Sidebar Start -->
+<main class="main-content">
+
+  <iq-dual-compact-menu></iq-dual-compact-menu>
+  <!-- Page Style Start -->
+  <div class="content-inner  pb-0" [class]="(pageLayoutSelector$ | async)" id="page_layout">
+    <!-- Page Render Here -->
+    <router-outlet></router-outlet>
+    <!-- Page Render Here -->
+  </div>
+  <!-- Page Style Start -->
+  <!-- Footer Start -->
+  <!-- Footer Start -->
+  <!-- Live Customizer Start -->
+  <iq-setting-offcanvas></iq-setting-offcanvas>
+  <!-- Live Customizer End -->
+  <app-footer appName="RSE"></app-footer>
+</main>
