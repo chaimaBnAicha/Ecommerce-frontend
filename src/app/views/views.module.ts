@@ -38,7 +38,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 // Modules
 import { ViewsRoutingModule } from './views-routing.module';
-import { QompacUiModule } from '../components/qompac-ui/qompac-ui.module';
+import { QompacUiModule } from 'src/app/FrontOffice/components/qompac-ui/qompac-ui.module';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
 import { UserAddComponent } from './users/user-add/user-add.component';
 import { UserListComponent } from './users/user-list/user-list.component';

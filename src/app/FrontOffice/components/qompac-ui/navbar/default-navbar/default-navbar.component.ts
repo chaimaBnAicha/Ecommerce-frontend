@@ -2,13 +2,13 @@ import { Component, Inject, OnInit, HostListener, TemplateRef } from '@angular/c
 import { DOCUMENT } from '@angular/common';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {SettingState} from '../../../../model/setting.model';
-import {theme_scheme, theme_scheme_direction} from '../../../../store/setting/actions';
-import {themeSchemeSelector, themeSchemeDirectionSelector} from '../../../../store/setting/selector';
+import {SettingState} from 'src/app/model/setting.model';
+import {theme_scheme, theme_scheme_direction} from 'src/app/store/setting/actions';
+import {themeSchemeSelector, themeSchemeDirectionSelector} from 'src/app/store/setting/selector';
 
 @Component({
-  selector: 'iq-dualcompact-navbar',
-  templateUrl: './dualcompact-navbar.component.html',
+  selector: 'iq-default-navbar',
+  templateUrl: './default-navbar.component.html',
   styles: [
     `
       .dropdown-toggle::after {
@@ -17,7 +17,7 @@ import {themeSchemeSelector, themeSchemeDirectionSelector} from '../../../../sto
     `
   ]
 })
-export class DualcompactNavbarComponent implements OnInit {
+export class DefaultNavbarComponent implements OnInit {
 
   themeScheme$: Observable<string>;
   themeSchemeDirection$: Observable<string>;

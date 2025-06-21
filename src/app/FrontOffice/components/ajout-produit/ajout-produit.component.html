@@ -1,0 +1,170 @@
+<!-- ajout-produit.component.html complet et corrigé -->
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="card ecommerce-card">
+      <div class="card-header bg-primary text-white">
+        <div class="header-title">
+          <h4 class="card-title mb-0">
+            <i class="fas fa-plus-circle me-2"></i>Ajouter un nouveau produit
+          </h4>
+        </div>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="produitForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+
+          <!-- Image principale -->
+          <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+              <div class="image-upload-box text-center p-4 border rounded-3">
+                <div class="preview-container mb-3">
+                  <img [src]="imagePreview || 'assets/images/ecommerce/upload-icon.png'"
+                       alt="Prévisualisation" class="img-fluid rounded product-preview"
+                       style="max-height: 200px;">
+                </div>
+                <label for="product-image" class="btn btn-outline-primary w-100">
+                  <i class="fas fa-cloud-upload-alt me-2"></i>Télécharger l'image principale
+                  <input id="product-image" type="file" class="d-none" (change)="onImageSelected($event)" accept="image/*">
+                </label>
+                <small class="text-muted d-block mt-2">Format recommandé : JPG, PNG (Max 2MB)</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Type & Catégorie -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Type de produit</label>
+                <select class="form-select" formControlName="typeProduit">
+                  <option value="CLASSIQUE">Classique</option>
+                  <option value="ENCHERE">Enchère</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Catégorie</label>
+                <select class="form-select" formControlName="categorie">
+                  <option value="" disabled selected>Choisissez une catégorie</option>
+                  <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nom }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nom & Description -->
+          <div class="form-group mb-3">
+            <label class="form-label fw-bold">Nom du produit</label>
+            <input type="text" class="form-control" formControlName="nom" placeholder="Ex: Smartphone XYZ">
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label fw-bold">Description</label>
+            <textarea class="form-control" formControlName="description" rows="4" placeholder="Détail du produit..."></textarea>
+          </div>
+
+          <!-- Section Classique -->
+          <div class="row" *ngIf="isClassique">
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Prix (€)</label>
+                <div class="input-group">
+                  <span class="input-group-text">€</span>
+                  <input type="number" class="form-control" formControlName="prixFixe" step="0.01">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Prix réduit (€)</label>
+                <div class="input-group">
+                  <span class="input-group-text">€</span>
+                  <input type="number" class="form-control" formControlName="prixReduit" step="0.01">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Quantité</label>
+                <input type="number" class="form-control" formControlName="quantite">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Enchère -->
+          <div class="row" *ngIf="isEnchere">
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Prix de départ (€)</label>
+                <div class="input-group">
+                  <span class="input-group-text">€</span>
+                  <input type="number" class="form-control" formControlName="prixDepart" step="0.01">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Date de début</label>
+                <input type="datetime-local" class="form-control" formControlName="dateDebut">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Date de fin</label>
+                <input type="datetime-local" class="form-control" formControlName="dateFin">
+              </div>
+            </div>
+          </div>
+
+          <!-- Options Supplémentaires -->
+          <div class="accordion mb-4" id="optionsAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOptions">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOptions" aria-expanded="true" aria-controls="collapseOptions">
+                  Options supplémentaires
+                </button>
+              </h2>
+              <div id="collapseOptions" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label class="form-label">Poids (kg)</label>
+                      <input type="number" class="form-control" formControlName="poids" step="0.01">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Dimensions (L x l x H en cm)</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" placeholder="Longueur" formControlName="longueur">
+                        <input type="number" class="form-control" placeholder="Largeur" formControlName="largeur">
+                        <input type="number" class="form-control" placeholder="Hauteur" formControlName="hauteur">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label class="form-label">Tags</label>
+                    <input type="text" class="form-control" formControlName="tags" placeholder="tag1, tag2">
+                  </div>
+                  <div class="form-check form-switch mt-3">
+                    <input class="form-check-input" type="checkbox" formControlName="enVedette" id="vedetteSwitch">
+                    <label class="form-check-label" for="vedetteSwitch">Mettre en vedette</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Boutons -->
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+              <i class="fas fa-times me-2"></i>Annuler
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save me-2"></i>Enregistrer le produit
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

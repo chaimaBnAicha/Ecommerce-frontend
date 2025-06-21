@@ -65,9 +65,11 @@ import { DualcompactNavbarComponent } from './navbar/dualcompact-navbar/dualcomp
     HorizontalListComponent,
     DualCompactMenuComponent,
     FooterComponent,
-    DualcompactNavbarComponent
+    DualcompactNavbarComponent,
+     HorizontalMenuComponent
   ],
   exports: [
+     HorizontalMenuComponent,
     SidebarComponent,
     BrandLogoComponent,
     BrandNameComponent,

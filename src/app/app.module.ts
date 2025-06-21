@@ -17,25 +17,56 @@ import { AppComponent } from './app.component';
 import { CountUpModule } from 'ngx-countup';
 import { ParseService } from './parse.service';
 import Parse from 'parse';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { SidebarCategoriesComponent } from './FrontOffice/sidebar-categories/sidebar-categories.component';
+import { TopbarComponent } from './FrontOffice/topbar/topbar.component';
+import { ProductListComponent } from './FrontOffice/product-list/product-list.component';
+import { CartComponent } from './FrontOffice/cart/cart.component'; // adapte le chemin si besoin
+import { AjoutProduitComponent } from './FrontOffice/components/ajout-produit/ajout-produit.component'; // adapte le chemin si besoin
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    
+    SidebarCategoriesComponent,
+    TopbarComponent,
+    ProductListComponent,
+    CartComponent,
+        AjoutProduitComponent
     
   ],
 
   imports: [
+    ReactiveFormsModule,
+    CommonModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     NgbModule,
     StoreModule.forRoot(StoreState),
     CountUpModule,
+    HttpClientModule,
+     BrowserAnimationsModule, // ✅ requis pour ngx-toastr
+    ToastrModule.forRoot(), 
 
   ],
 
 
-  providers: [ParseService],
+  providers: [
+  ParseService,
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+],
+
   bootstrap: [AppComponent],
   exports: [
   

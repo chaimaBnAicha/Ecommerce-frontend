@@ -2,9 +2,11 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { NgbOffcanvasConfig, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import {SettingState} from '../../../../model/setting.model';
-import * as SettingActions from '../../../../store/setting/actions';
-import * as SettingSelectors from '../../../../store/setting/selector';
+import {SettingState} from 'src/app/model/setting.model';
+import * as SettingSelectors from 'src/app/store/setting/selector';
+import * as SettingActions from 'src/app/store/setting/actions';
+
+
 @Component({
   selector: 'iq-setting-offcanvas',
   templateUrl: './setting-offcanvas.component.html',

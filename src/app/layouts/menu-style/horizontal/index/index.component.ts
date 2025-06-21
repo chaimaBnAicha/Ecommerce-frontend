@@ -4,6 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { SettingState } from '../../../../model/setting.model';
 import { sidebarMenuStyleSelector, sidebarColorSelector, sidebarTypeSelector, pageLayoutSelector, themeColorSelector } from '../../../../store/setting/selector';
+import { QompacUiModule } from 'src/app/FrontOffice/components/qompac-ui/qompac-ui.module';
 
 @Component({
   selector: 'app-index',
@@ -12,7 +13,6 @@ import { sidebarMenuStyleSelector, sidebarColorSelector, sidebarTypeSelector, pa
     './index.component.scss',
   ],
   encapsulation: ViewEncapsulation.None
-
 })
 export class IndexComponent implements OnInit {
 

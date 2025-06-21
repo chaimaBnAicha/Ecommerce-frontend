@@ -6,6 +6,7 @@ const routes: Routes = [
   {path:'SignUpComponent',redirectTo:'/auth/sign-up',pathMatch:'full'},
   {path:'DashboardComponent',redirectTo:'/dashboard',pathMatch:'full'},
   {path:'ProjetListComponent',redirectTo:'/projets/projet-list',pathMatch:'full'},
+  {path:'ProjetAddComponent',redirectTo:'components/ajout-produit',pathMatch:'full'},
   { path: '', loadChildren: () => import('./layouts/default/default.module').then(m => m.DefaultModule) },
   { path: '', loadChildren: () => import('./layouts/simple/simple.module').then(m => m.SimpleModule) },
   { path: '', loadChildren: () => import('./layouts/menu-style/horizontal/horizontal.module').then(m => m.HorizontalModule) },

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { SimpleRoutingModule } from './simple-routing.module';
 import { IndexComponent } from './index/index.component';
-import { QompacUiModule } from '../../components/qompac-ui/qompac-ui.module'
+import { QompacUiModule } from 'src/app/FrontOffice/components/qompac-ui/qompac-ui.module'
 
 
 

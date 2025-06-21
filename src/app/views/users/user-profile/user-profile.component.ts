@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { ShareOffcanvasComponent } from 'src/app/components/qompac-ui/widgets/share-offcanvas/share-offcanvas.component';
+import { ShareOffcanvasComponent } from 'src/app/FrontOffice/components/qompac-ui/widgets/share-offcanvas/share-offcanvas.component';
 
 
 

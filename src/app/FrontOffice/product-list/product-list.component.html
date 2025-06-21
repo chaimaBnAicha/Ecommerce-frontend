@@ -1,0 +1,14 @@
+<div class="row g-4">
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let product of filteredProducts">
+    <div class="card h-100 shadow-sm">
+      <img [src]="product.image" class="card-img-top" [alt]="product.name">
+      <div class="card-body d-flex flex-column justify-content-between">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text fw-bold">{{ product.price | currency:'EUR' }}</p>
+        <button class="btn btn-primary mt-auto" (click)="onAddToCart(product)">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

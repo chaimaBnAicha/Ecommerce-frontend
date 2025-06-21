@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {SettingState} from '../../../../model/setting.model';
-import {appNameSelector} from '../../../../store/setting/selector';
+import {SettingState} from 'src/app/model/setting.model';
+import {appNameSelector} from 'src/app/store/setting/selector';
 
 @Component({
   selector: '[iq-brand-name]',

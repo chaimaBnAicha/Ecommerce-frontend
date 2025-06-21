@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { DualCompactRoutingModule } from './dual-compact-routing.module';
 import { IndexComponent } from './index/index.component';
-import { QompacUiModule } from '../../../components/qompac-ui/qompac-ui.module'
 
 
 
@@ -14,7 +13,6 @@ import { QompacUiModule } from '../../../components/qompac-ui/qompac-ui.module'
   imports: [
     CommonModule,
     DualCompactRoutingModule,
-    QompacUiModule
   ],
   exports: [
     IndexComponent

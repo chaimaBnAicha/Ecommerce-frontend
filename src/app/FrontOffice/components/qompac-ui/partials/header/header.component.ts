@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Router,ActivationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
-import {SettingState} from '../../../../model/setting.model';
-import {theme_font_size, sidebar_type} from '../../../../store/setting/actions';
-import {themeFontSizeSelector, sidebarTypeSelector} from '../../../../store/setting/selector';
+import {SettingState} from 'src/app/model/setting.model';
+import {theme_font_size, sidebar_type} from 'src/app/store/setting/actions';
+import {themeFontSizeSelector, sidebarTypeSelector} from 'src/app/store/setting/selector';
 @Component({
   selector: 'iq-header',
   templateUrl: './header.component.html',

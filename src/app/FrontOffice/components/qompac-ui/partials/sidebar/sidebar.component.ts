@@ -1,10 +1,10 @@
 import { Component,  ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import Scrollbar from 'smooth-scrollbar'
 import { Observable } from 'rxjs';
-import {sidebar_type} from '../../../../store/setting/actions';
-import * as SettingSelectors from '../../../../store/setting/selector';
+import {sidebar_type} from 'src/app/store/setting/actions';
+import * as SettingSelectors from 'src/app/store/setting/selector';
 import { Store, select } from '@ngrx/store';
-import {SettingState} from '../../../../model/setting.model';
+import {SettingState} from 'src/app/model/setting.model';
 @Component({
   selector: '[iq-sidebar]',
   templateUrl: './sidebar.component.html'
