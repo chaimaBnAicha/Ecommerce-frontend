@@ -1,0 +1,143 @@
+/* Variables */
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --accent-color: #e74c3c;
+  --light-bg: #f8f9fa;
+  --dark-text: #2c3e50;
+  --light-text: #ecf0f1;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Layout */
+.ecommerce-layout {
+  display: flex;
+  min-height: 90vh;
+  background-color: #fff;
+}
+
+.sidebar {
+  width: 250px;
+  min-width: 200px;
+  background: var(--light-bg);
+  border-right: 1px solid #eee;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background: #fff;
+}
+
+/* Promo Carousel */
+.promo-carousel {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.promo-slides {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.promo-slide {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+}
+
+.promo-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+}
+
+.promo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.promo-overlay h3 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.promo-overlay p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Add Product Button */
+.add-product-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2rem 0;
+}
+
+.btn-add-product {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 50px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.btn-add-product:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .ecommerce-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .promo-image {
+    height: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .promo-overlay {
+    padding: 1rem;
+  }
+  
+  .promo-overlay h3 {
+    font-size: 1.5rem;
+  }
+  
+  .promo-overlay p {
+    font-size: 1rem;
+  }
+}

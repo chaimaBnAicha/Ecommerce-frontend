@@ -28,7 +28,8 @@ import { SidebarCategoriesComponent } from './FrontOffice/sidebar-categories/sid
 import { TopbarComponent } from './FrontOffice/topbar/topbar.component';
 import { ProductListComponent } from './FrontOffice/product-list/product-list.component';
 import { CartComponent } from './FrontOffice/cart/cart.component'; // adapte le chemin si besoin
-import { AjoutProduitComponent } from './FrontOffice/components/ajout-produit/ajout-produit.component'; // adapte le chemin si besoin
+import { AjoutProduitComponent } from './FrontOffice/components/ajout-produit/ajout-produit.component';
+import { AccueilComponent } from './FrontOffice/accueil/accueil.component'; // adapte le chemin si besoin
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { AjoutProduitComponent } from './FrontOffice/components/ajout-produit/aj
     TopbarComponent,
     ProductListComponent,
     CartComponent,
-        AjoutProduitComponent
+        AjoutProduitComponent,
+        AccueilComponent
     
   ],
 

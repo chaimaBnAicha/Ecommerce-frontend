@@ -1,16 +1,37 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4" style="height: 64px;">
-  <a class="navbar-brand fw-bold" href="#" style="font-size: 1.5rem; letter-spacing: 1px;">EcommerceApp</a>
-  <form class="d-flex mx-4 flex-grow-1" style="max-width: 500px;" (submit)="onSearch($event)">
-    <input class="form-control me-2" type="search" placeholder="Rechercher un produit..." aria-label="Search" [(ngModel)]="searchValue" name="search">
-    <button class="btn btn-outline-primary" type="submit">Rechercher</button>
-  </form>
-  <div class="d-flex align-items-center ms-auto gap-4">
-    <button class="btn position-relative" style="background: none; border: none;">
-      <span class="material-icons" style="font-size: 28px;">shopping_cart</span>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.8rem;">{{ cartCount }}</span>
-    </button>
-    <button class="btn" style="background: none; border: none;">
-      <span class="material-icons" style="font-size: 28px;">account_circle</span>
-    </button>
+<nav class="topbar-container">
+  <div class="topbar-content">
+    <!-- Logo -->
+    <a class="logo" href="#">
+      <span class="logo-text">Ecommerce</span>
+      <span class="logo-highlight">App</span>
+    </a>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <form (submit)="onSearch($event)">
+        <div class="search-input-group">
+          <input type="text" 
+                 [(ngModel)]="searchValue" 
+                 name="search"
+                 placeholder="Rechercher un produit..." 
+                 class="search-input">
+          <button type="submit" class="search-button">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Icons -->
+    <div class="actions-container">
+      <button class="action-button cart-button" (click)="navigateToCart()">
+        <i class="bi bi-cart3"></i>
+        <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+      </button>
+      
+      <button class="action-button user-button" (click)="navigateToAccount()">
+        <i class="bi bi-person-circle"></i>
+      </button>
+    </div>
   </div>
 </nav>

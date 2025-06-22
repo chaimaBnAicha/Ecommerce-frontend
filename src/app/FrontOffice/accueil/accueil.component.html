@@ -1,0 +1,37 @@
+<app-topbar [cartCount]="cartCount" (searchChanged)="onSearchChanged($event)"></app-topbar>
+
+<div class="ecommerce-layout">
+  <aside class="sidebar">
+    <app-sidebar-categories (categorySelected)="onCategorySelected($event)"></app-sidebar-categories>
+  </aside>
+
+  <main class="main-content">
+    <!-- Section Promotions - Carrousel -->
+    <div class="promo-carousel mb-5">
+      <div class="promo-slides">
+        <div class="promo-slide" *ngFor="let promo of promos">
+          <img [src]="promo.image" [alt]="promo.title" class="promo-image">
+          <div class="promo-overlay">
+            <h3>{{ promo.title }}</h3>
+            <p>{{ promo.description }}</p>
+            <button class="btn btn-light">Voir les offres</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton Ajouter un produit -->
+    <div class="add-product-container">
+      <button class="btn btn-success btn-add-product" (click)="goToAjoutProduit()">
+        <i class="bi bi-plus-lg"></i> Ajouter un produit
+      </button>
+    </div>
+
+    <!-- Zone centrale pour les produits -->
+    <app-product-list
+      [selectedCategory]="selectedCategory"
+      [search]="search"
+      (addToCart)="onAddToCart($event)">
+    </app-product-list>
+  </main>
+</div>

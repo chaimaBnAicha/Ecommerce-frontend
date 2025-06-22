@@ -1,11 +1,25 @@
-<p>sidebar-categories works!</p>
+<div class="sidebar-container">
+  <div class="sidebar-header">
+    <h3>Catégories</h3>
+    <div class="search-box">
+      <input type="text" placeholder="Rechercher..." (input)="filterCategories($event)">
+      <i class="bi bi-search"></i>
+    </div>
+  </div>
 
-<ul class="list-group list-group-flush">
-  <li *ngFor="let cat of categories"
-      (click)="selectCategory(cat)"
-      [class.active]="cat === selectedCategory"
-      class="list-group-item list-group-item-action"
-      style="cursor:pointer;">
-    {{ cat }}
-  </li>
-</ul>
+  <ul class="category-list">
+    <li *ngFor="let cat of filteredCategories"
+        (click)="selectCategory(cat)"
+        [class.active]="cat === selectedCategory"
+        class="category-item">
+      <span class="category-name">{{ cat }}</span>
+      <i class="bi bi-chevron-right" *ngIf="cat === selectedCategory"></i>
+    </li>
+  </ul>
+
+  <div class="sidebar-footer" *ngIf="selectedCategory !== 'Tous'">
+    <button class="btn btn-clear" (click)="clearFilter()">
+      <i class="bi bi-x-circle"></i> Effacer le filtre
+    </button>
+  </div>
+</div>
