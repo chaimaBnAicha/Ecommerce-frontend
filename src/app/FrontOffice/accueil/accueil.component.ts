@@ -1,13 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { ProduitService } from '../../services/produit.service';
+import { ProduitDetailsDialogComponent } from '../produit-details-dialog/produit-details-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 interface Product {
   id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
+  nom: string;
+  description: string;
+  imageUrl: string;
+  prixFixe?: number;
+  prixDepart?: number;
+  dateDebut?: string;
+  dateFin?: string;
+  typeProduit: 'PRODUITCLASSIQUE' | 'PRODUITENCHERE';
 }
+
 
 interface Promo {
   id: number;
@@ -21,52 +28,73 @@ interface Promo {
   templateUrl: './accueil.component.html',
   styleUrls: ['./accueil.component.scss']
 })
-export class AccueilComponent {
-  selectedCategory: string = 'Tous';
-  search: string = '';
+export class AccueilComponent implements OnInit {
+  produitsClassiques: Product[] = [];
+  produitsEncheres: Product[] = [];
   cart: Product[] = [];
+
   promos: Promo[] = [
     {
       id: 1,
       title: 'Promo Été',
-      description: "Profitez de réductions exceptionnelles jusqu'à -50% sur notre sélection estivale !",
+      description: "Profitez de réductions exceptionnelles jusqu'à -50% !",
       image: 'assets/images/promo_ete.png'
     },
-    { 
-      id: 2, 
-      title: 'Électronique en Fête', 
-      description: 'Découvrez nos offres spéciales sur les derniers appareils électroniques.', 
-      image: 'assets/images/promo_electronique.jpg' 
-    },
-    { 
-      id: 3, 
-      title: 'Nouveautés', 
-      description: 'Découvrez nos nouveaux produits arrivés cette semaine.', 
-      image: 'assets/images/promo_nouveautes.jpg' 
+    {
+      id: 2,
+      title: 'Électronique',
+      description: 'Offres spéciales sur les appareils électroniques.',
+      image: 'assets/images/promo_electronique.jpg'
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private produitService: ProduitService,
+    private dialog: MatDialog
+  ) {}
 
-  onCategorySelected(cat: string): void {
-    this.selectedCategory = cat;
+  ngOnInit(): void {
+    this.chargerProduits();
   }
 
-  onSearchChanged(search: string): void {
-    this.search = search;
-  }
+chargerProduits(): void {
+  this.produitService.getAllProduits().subscribe({
+    next: (data: Product[]) => {
+      console.log('Produits reçus:', data);
+      const types = Array.from(new Set(data.map(p => p.typeProduit)));
+      console.log('Types trouvés:', types);
 
-  onAddToCart(product: Product): void {
-    this.cart.push(product);
-    // Option: Ajouter une notification/toast
-  }
+      this.produitsClassiques = data.filter(p => p.typeProduit === 'PRODUITCLASSIQUE');
+      this.produitsEncheres = data.filter(p => p.typeProduit === 'PRODUITENCHERE');
 
-  get cartCount(): number {
-    return this.cart.length;
-  }
+      console.log('Classiques:', this.produitsClassiques);
+      console.log('Enchères:', this.produitsEncheres);
+    },
+    error: (err) => console.error('Erreur chargement produits:', err)
+  });
+}
+
+
 
   goToAjoutProduit(): void {
     this.router.navigate(['/ajouter-produit']);
+  }
 
+  voirDetails(produit: Product): void {
+    this.dialog.open(ProduitDetailsDialogComponent, {
+      width: '100%',
+      maxWidth: '100vw',
+      height: '100vh',
+      panelClass: 'full-screen-dialog',
+      backdropClass: 'dialog-backdrop',
+      data: { produit },
+      disableClose: false
+    });
+  }
+
+  onAddToCart(p: Product): void {
+    this.cart.push(p);
+    // Logique panier à compléter
   }
 }

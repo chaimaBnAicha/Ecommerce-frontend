@@ -1,171 +1,150 @@
-
-<!-- ajout-produit.component.html complet et corrigé -->
-<div class="row">
-  <div class="col-lg-8 mx-auto">
-    <div class="card ecommerce-card">
-      <div class="card-header bg-primary text-white">
-        <div class="header-title">
-          <h4 class="card-title mb-0">
-            <i class="fas fa-plus-circle me-2"></i>Ajouter un nouveau produit
-          </h4>
+<main class="main-content">
+  <div class="product-form-card">
+    <h2 class="form-title">
+      <mat-icon class="form-title-icon">add_box</mat-icon>
+      Ajouter un nouveau produit
+    </h2>
+    <form [formGroup]="produitForm" (ngSubmit)="onSubmit()" class="product-form" novalidate>
+      <!-- Section Principale -->
+      <section class="form-section">
+        <h3 class="section-title">Informations principales</h3>
+        <div class="form-group">
+          <label for="nom" class="form-label">Nom du produit <span class="required">*</span></label>
+          <input type="text" id="nom" formControlName="nom" class="form-input" placeholder="Ex: Smartphone X Pro" />
+          <div *ngIf="produitForm.get('nom')?.invalid && produitForm.get('nom')?.touched" class="error-message">
+            <span *ngIf="produitForm.get('nom')?.errors?.['required']">Ce champ est requis</span>
+            <span *ngIf="produitForm.get('nom')?.errors?.['maxlength']">Maximum 100 caractères</span>
+          </div>
         </div>
+        <div class="form-group">
+          <label for="description" class="form-label">Description <span class="required">*</span></label>
+          <textarea id="description" formControlName="description" class="form-textarea" rows="4" placeholder="Décrivez votre produit en détails..."></textarea>
+          <div class="char-counter">{{ produitForm.get('description')?.value?.length || 0 }}/500</div>
+          <div *ngIf="produitForm.get('description')?.invalid && produitForm.get('description')?.touched" class="error-message">
+            <span *ngIf="produitForm.get('description')?.errors?.['required']">Ce champ est requis</span>
+            <span *ngIf="produitForm.get('description')?.errors?.['maxlength']">Maximum 500 caractères</span>
+          </div>
+        </div>
+      </section>
+
+      <hr class="form-separator" />
+
+      <!-- Section Secondaire -->
+      <section class="form-section">
+        <h3 class="section-title">Détails du produit</h3>
+        <div class="form-group">
+          <label class="form-label">Type de produit <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" formControlName="typeProduit" value="CLASSIQUE" />
+              <span class="radio-custom"></span>
+              <span>Classique</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" formControlName="typeProduit" value="ENCHERE" />
+              <span class="radio-custom"></span>
+              <span>Enchère</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="categorie" class="form-label">Catégorie <span class="required">*</span></label>
+          <select id="categorie" formControlName="categorie" class="form-select">
+            <option [ngValue]="null" disabled selected>Sélectionnez une catégorie</option>
+            <option *ngFor="let c of categories" [ngValue]="c.id">{{ c.nom }}</option>
+          </select>
+          <div *ngIf="produitForm.get('categorie')?.invalid && produitForm.get('categorie')?.touched" class="error-message">
+            Veuillez sélectionner une catégorie
+          </div>
+        </div>
+
+        <!-- Champs dynamiques -->
+        <div class="dynamic-fields">
+          <div *ngIf="isClassique" class="price-field">
+            <label for="prixFixe" class="form-label">Prix Fixe (DT) <span class="required">*</span></label>
+            <div class="input-with-icon">
+              <span class="currency-icon">DT</span>
+              <input type="number" id="prixFixe" formControlName="prixFixe" class="form-input" min="0" step="0.01" placeholder="0.00" />
+            </div>
+            <div *ngIf="produitForm.get('prixFixe')?.invalid && produitForm.get('prixFixe')?.touched" class="error-message">
+              <span *ngIf="produitForm.get('prixFixe')?.errors?.['required']">Le prix fixe est requis</span>
+              <span *ngIf="produitForm.get('prixFixe')?.errors?.['min']">Le prix doit être positif</span>
+            </div>
+          </div>
+
+          <div *ngIf="isEnchere" class="auction-fields">
+            <div class="price-field">
+              <label for="prixDepart" class="form-label">Prix de départ (DT) <span class="required">*</span></label>
+              <div class="input-with-icon">
+                <span class="currency-icon">DT</span>
+                <input type="number" id="prixDepart" formControlName="prixDepart" class="form-input" min="0" step="0.01" placeholder="0.00" />
+              </div>
+              <div *ngIf="produitForm.get('prixDepart')?.invalid && produitForm.get('prixDepart')?.touched" class="error-message">
+                <span *ngIf="produitForm.get('prixDepart')?.errors?.['required']">Le prix de départ est requis</span>
+                <span *ngIf="produitForm.get('prixDepart')?.errors?.['min']">Le prix doit être positif</span>
+              </div>
+            </div>
+            <div class="date-fields">
+              <div class="form-group">
+                <label for="dateDebut" class="form-label">Date début <span class="required">*</span></label>
+                <input type="date" id="dateDebut" formControlName="dateDebut" class="form-input" />
+                <div *ngIf="produitForm.get('dateDebut')?.invalid && produitForm.get('dateDebut')?.touched" class="error-message">
+                  <span>La date de début est requise</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="dateFin" class="form-label">Date fin <span class="required">*</span></label>
+                <input type="date" id="dateFin" formControlName="dateFin" class="form-input" />
+                <div *ngIf="produitForm.get('dateFin')?.invalid && produitForm.get('dateFin')?.touched" class="error-message">
+                  <span>La date de fin est requise</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="form-separator" />
+
+      <!-- Section Image -->
+      <section class="form-section">
+        <h3 class="section-title">Image du produit</h3>
+        <div class="form-group">
+          <div
+            class="image-upload-box dropzone"
+            [class.drag-over]="dragOver"
+            (click)="fileInput.click()"
+            (drop)="onDrop($event)"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+          >
+            <input #fileInput type="file" (change)="onImageSelected($event)" accept="image/*" class="file-input" />
+            <div *ngIf="!imagePreview" class="upload-instructions">
+              <mat-icon class="upload-icon">cloud_upload</mat-icon>
+              <p class="file-types">Formats supportés: JPG, PNG (Max 2MB)</p>
+            </div>
+            <div *ngIf="imagePreview" class="image-preview-container">
+              <img [src]="imagePreview" alt="Aperçu du produit" class="product-preview" />
+              <button type="button" class="remove-image-btn" (click)="removeImage()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Boutons Actions -->
+      <div class="form-actions form-actions--center">
+        <button type="submit" class="btn-submit" [disabled]="produitForm.invalid">
+          <span>Enregistrer</span>
+        </button>
+        <button type="button" class="btn-reset" (click)="resetForm()">
+          <span>Réinitialiser</span>
+        </button>
+        <button type="button" class="btn-cancel" (click)="cancel()">
+          <span>Annuler</span>
+        </button>
       </div>
-      <div class="card-body">
-        <form [formGroup]="produitForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
-
-          <!-- Image principale -->
-          <div class="row mb-4">
-            <div class="col-md-6 mx-auto">
-              <div class="image-upload-box text-center p-4 border rounded-3">
-                <div class="preview-container mb-3">
-                  <img [src]="imagePreview || 'assets/images/ecommerce/upload-icon.png'"
-                       alt="Prévisualisation" class="img-fluid rounded product-preview"
-                       style="max-height: 200px;">
-                </div>
-                <label for="product-image" class="btn btn-outline-primary w-100">
-                  <i class="fas fa-cloud-upload-alt me-2"></i>Télécharger l'image principale
-                  <input id="product-image" type="file" class="d-none" (change)="onImageSelected($event)" accept="image/*">
-                </label>
-                <small class="text-muted d-block mt-2">Format recommandé : JPG, PNG (Max 2MB)</small>
-              </div>
-            </div>
-          </div>
-
-          <!-- Type & Catégorie -->
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Type de produit</label>
-                <select class="form-select" formControlName="typeProduit">
-                  <option value="CLASSIQUE">Classique</option>
-                  <option value="ENCHERE">Enchère</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Catégorie</label>
-                <select class="form-select" formControlName="categorie">
-                  <option value="" disabled selected>Choisissez une catégorie</option>
-                  <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nom }}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Nom & Description -->
-          <div class="form-group mb-3">
-            <label class="form-label fw-bold">Nom du produit</label>
-            <input type="text" class="form-control" formControlName="nom" placeholder="Ex: Smartphone XYZ">
-          </div>
-          <div class="form-group mb-3">
-            <label class="form-label fw-bold">Description</label>
-            <textarea class="form-control" formControlName="description" rows="4" placeholder="Détail du produit..."></textarea>
-          </div>
-
-          <!-- Section Classique -->
-          <div class="row" *ngIf="isClassique">
-            <div class="col-md-4">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Prix (€)</label>
-                <div class="input-group">
-                  <span class="input-group-text">€</span>
-                  <input type="number" class="form-control" formControlName="prixFixe" step="0.01">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Prix réduit (€)</label>
-                <div class="input-group">
-                  <span class="input-group-text">€</span>
-                  <input type="number" class="form-control" formControlName="prixReduit" step="0.01">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Quantité</label>
-                <input type="number" class="form-control" formControlName="quantite">
-              </div>
-            </div>
-          </div>
-
-          <!-- Section Enchère -->
-          <div class="row" *ngIf="isEnchere">
-            <div class="col-md-4">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Prix de départ (€)</label>
-                <div class="input-group">
-                  <span class="input-group-text">€</span>
-                  <input type="number" class="form-control" formControlName="prixDepart" step="0.01">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Date de début</label>
-                <input type="datetime-local" class="form-control" formControlName="dateDebut">
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group mb-3">
-                <label class="form-label fw-bold">Date de fin</label>
-                <input type="datetime-local" class="form-control" formControlName="dateFin">
-              </div>
-            </div>
-          </div>
-
-          <!-- Options Supplémentaires -->
-          <div class="accordion mb-4" id="optionsAccordion">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOptions">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseOptions" aria-expanded="true" aria-controls="collapseOptions">
-                  Options supplémentaires
-                </button>
-              </h2>
-              <div id="collapseOptions" class="accordion-collapse collapse show">
-                <div class="accordion-body">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <label class="form-label">Poids (kg)</label>
-                      <input type="number" class="form-control" formControlName="poids" step="0.01">
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label">Dimensions (L x l x H en cm)</label>
-                      <div class="input-group">
-                        <input type="number" class="form-control" placeholder="Longueur" formControlName="longueur">
-                        <input type="number" class="form-control" placeholder="Largeur" formControlName="largeur">
-                        <input type="number" class="form-control" placeholder="Hauteur" formControlName="hauteur">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group mt-3">
-                    <label class="form-label">Tags</label>
-                    <input type="text" class="form-control" formControlName="tags" placeholder="tag1, tag2">
-                  </div>
-                  <div class="form-check form-switch mt-3">
-                    <input class="form-check-input" type="checkbox" formControlName="enVedette" id="vedetteSwitch">
-                    <label class="form-check-label" for="vedetteSwitch">Mettre en vedette</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Boutons -->
-          <div class="d-flex justify-content-between mt-4">
-            <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
-              <i class="fas fa-times me-2"></i>Annuler
-            </button>
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-save me-2"></i>Enregistrer le produit
-            </button>
-          </div>
-
-        </form>
-      </div>
-    </div>
+    </form>
   </div>
-</div>
+</main>

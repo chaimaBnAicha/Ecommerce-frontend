@@ -35,6 +35,9 @@ ajouterProduit(produit: ProduitDTO): Observable<any> {
 
   return this.http.post(`${this.baseUrl}/ajoutProduit`, produit, { headers });
 }
+getAllProduits(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.baseUrl}/all`);
+}
 
 
 

@@ -1,37 +1,68 @@
-<app-topbar [cartCount]="cartCount" (searchChanged)="onSearchChanged($event)"></app-topbar>
-
-<div class="ecommerce-layout">
-  <aside class="sidebar">
-    <app-sidebar-categories (categorySelected)="onCategorySelected($event)"></app-sidebar-categories>
-  </aside>
-
-  <main class="main-content">
-    <!-- Section Promotions - Carrousel -->
-    <div class="promo-carousel mb-5">
+<main class="main-content">
+  <!-- Section Promotions -->
+  <section class="promo-section">
+    <div class="promo-carousel">
       <div class="promo-slides">
         <div class="promo-slide" *ngFor="let promo of promos">
-          <img [src]="promo.image" [alt]="promo.title" class="promo-image">
-          <div class="promo-overlay">
-            <h3>{{ promo.title }}</h3>
-            <p>{{ promo.description }}</p>
-            <button class="btn btn-light">Voir les offres</button>
+          <img [src]="promo.image" class="promo-image" [alt]="promo.title">
+          <div class="promo-content">
+            <h3 class="promo-title">{{ promo.title }}</h3>
+            <p class="promo-description">{{ promo.description }}</p>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Bouton Ajouter un produit -->
-    <div class="add-product-container">
-      <button class="btn btn-success btn-add-product" (click)="goToAjoutProduit()">
-        <i class="bi bi-plus-lg"></i> Ajouter un produit
-      </button>
+  <!-- Bouton Ajouter un produit -->
+  <div class="add-product-container">
+    <button class="btn-add-product" (click)="goToAjoutProduit()">
+      <span class="plus-icon">+</span> Ajouter un produit
+    </button>
+  </div>
+
+  <!-- Produits Classiques -->
+  <section class="products-section mt-4">
+    <h2 class="section-title">🛍️ Produits Classiques</h2>
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let p of produitsClassiques">
+        <div class="product-image-container">
+          <img [src]="p.imageUrl" class="product-image" [alt]="p.nom">
+          <button class="details-btn" (click)="voirDetails(p)">
+            <span class="material-icons">visibility</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ p.nom }}</h3>
+          <p class="product-price">{{ p.prixFixe }} DT</p>
+          <button class="add-to-cart-btn" (click)="onAddToCart(p)">
+            Ajouter au panier
+          </button>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Zone centrale pour les produits -->
-    <app-product-list
-      [selectedCategory]="selectedCategory"
-      [search]="search"
-      (addToCart)="onAddToCart($event)">
-    </app-product-list>
-  </main>
-</div>
+  <!-- Produits Enchères -->
+  <section class="products-section mt-5">
+    <h2 class="section-title">📣 Produits en Enchère</h2>
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let p of produitsEncheres">
+        <div class="product-image-container">
+          <img [src]="p.imageUrl" class="product-image" [alt]="p.nom">
+          <button class="details-btn" (click)="voirDetails(p)">
+            <span class="material-icons">visibility</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ p.nom }}</h3>
+          <p class="product-price text-warning">À partir de : {{ p.prixDepart }} DT</p>
+          <p class="product-date text-muted">Du {{ p.dateDebut | date }} au {{ p.dateFin | date }}</p>
+          <button class="add-to-cart-btn" (click)="onAddToCart(p)">
+            Ajouter au panier
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

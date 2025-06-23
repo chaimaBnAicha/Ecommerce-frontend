@@ -1,0 +1,38 @@
+<div class="full-screen-overlay">
+  <div class="product-detail-card">
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+    
+    <div class="product-header">
+      <h1>{{ data.produit.nom }}</h1>
+      <div class="price">{{ data.produit.prixFixe ?? data.produit.prixDepart }} DT</div>
+    </div>
+    
+    <div class="product-image-container">
+      <img [src]="data.produit.imageUrl" [alt]="data.produit.nom">
+    </div>
+    
+    <div class="product-details">
+      <h2>Description</h2>
+      <p>{{ data.produit.description }}</p>
+      
+      <div class="detail-row">
+        <span class="detail-label">Prix :</span>
+        <span class="detail-value">{{ data.produit.prixFixe ?? data.produit.prixDepart }} DT</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Type :</span>
+        <span class="detail-value">
+          {{ data.produit.typeProduit === 'CLASSIQUE' ? 'Produit classique' : 'Enchère' }}
+        </span>
+      </div>
+    </div>
+    
+    <button mat-raised-button class="add-to-cart-button" (click)="addToCart()">
+      <mat-icon>add_shopping_cart</mat-icon>
+      Ajouter au panier
+    </button>
+  </div>
+</div>

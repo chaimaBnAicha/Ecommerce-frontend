@@ -1,0 +1,11 @@
+<app-topbar [cartCount]="cartCount" (searchChanged)="onSearchChanged($event)"></app-topbar>
+
+<div class="ecommerce-layout" style="display: flex; min-height: 90vh;">
+  <aside style="width: 250px; min-width: 200px; background: #f8f9fa; border-right: 1px solid #eee;">
+    <app-sidebar-categories (categorySelected)="onCategorySelected($event)"></app-sidebar-categories>
+  </aside>
+
+  <main style="flex: 1; padding: 2rem; background: #fff;">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -29,7 +29,14 @@ import { TopbarComponent } from './FrontOffice/topbar/topbar.component';
 import { ProductListComponent } from './FrontOffice/product-list/product-list.component';
 import { CartComponent } from './FrontOffice/cart/cart.component'; // adapte le chemin si besoin
 import { AjoutProduitComponent } from './FrontOffice/components/ajout-produit/ajout-produit.component';
-import { AccueilComponent } from './FrontOffice/accueil/accueil.component'; // adapte le chemin si besoin
+import { AccueilComponent } from './FrontOffice/accueil/accueil.component';
+import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.component';
+import { ProduitDetailsDialogComponent } from './FrontOffice/produit-details-dialog/produit-details-dialog.component';
+
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -40,24 +47,30 @@ import { AccueilComponent } from './FrontOffice/accueil/accueil.component'; // a
     ProductListComponent,
     CartComponent,
         AjoutProduitComponent,
-        AccueilComponent
+        AccueilComponent,
+        DefaultLayoutComponent,
+            ProduitDetailsDialogComponent
+
     
   ],
 
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
+ imports: [
+      MatSnackBarModule,
+      MatIconModule,
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     NgbModule,
     StoreModule.forRoot(StoreState),
     CountUpModule,
     HttpClientModule,
-     BrowserAnimationsModule, // ✅ requis pour ngx-toastr
-    ToastrModule.forRoot(), 
+    BrowserAnimationsModule,
+      MatDialogModule,
+    MatButtonModule,
+    ToastrModule.forRoot()
+],
 
-  ],
 
 
   providers: [
