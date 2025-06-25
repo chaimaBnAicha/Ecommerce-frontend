@@ -1,16 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+/* Import correct de Bootstrap */
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/utilities";
 
-/* Importing Qompac UI SCSS file. */
-@import 'assets/scss/qompac-ui.scss';
-@import 'assets/scss/custom.scss';
-@import 'assets/scss/dark.scss';
-@import 'assets/scss/rtl.scss';
-@import 'assets/scss/customizer.scss';
+// Surcharge des variables Bootstrap AVANT l'import principal
+$primary: #2563eb;
+$danger: #ef4444;
+$accent: #3b82f6;
+$border-radius: 16px;
 
+// Génère les nouvelles variables CSS
+:root {
+  --primary: #{$primary};
+  --danger: #{$danger};
+  --accent: #{$accent};
+}
 
-// Custom Angular Style
-.dropdown-toggle.hide-toggler{
-  &::after {
-    content: unset;
+@import "~bootstrap/scss/bootstrap";
+
+/* Styles personnalisés */
+.btn-gradient {
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  border-radius: $border-radius;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: linear-gradient(90deg, darken($primary, 10%), darken($accent, 10%));
+    transform: translateY(-2px);
   }
 }
+
+/* Désactivez temporairement les imports problématiques */
+// @import './assets/scss/qompac-ui.scss'; // À réactiver après vérification
+// @import './assets/scss/custom.scss';

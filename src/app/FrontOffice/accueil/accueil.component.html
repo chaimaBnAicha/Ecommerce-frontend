@@ -1,68 +1,119 @@
-<main class="main-content">
-  <!-- Section Promotions -->
-  <section class="promo-section">
-    <div class="promo-carousel">
-      <div class="promo-slides">
-        <div class="promo-slide" *ngFor="let promo of promos">
-          <img [src]="promo.image" class="promo-image" [alt]="promo.title">
-          <div class="promo-content">
-            <h3 class="promo-title">{{ promo.title }}</h3>
-            <p class="promo-description">{{ promo.description }}</p>
+<main class="container-fluid px-4 py-5 bg-light">
+
+  <!-- Promotions - Carousel -->
+  <section class="mb-5">
+    <div id="promoCarousel" class="carousel slide rounded-4 overflow-hidden shadow-lg" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active" *ngFor="let promo of promos">
+          <div class="position-relative">
+            <img [src]="promo.image" class="d-block w-100" style="height: 400px; object-fit: cover;" [alt]="promo.title">
+
+            <div class="carousel-overlay">
+              <div class="container py-4">
+                <h3 class="display-5 fw-bold mb-3 text-white">{{ promo.title }}</h3>
+                <p class="lead mb-4 text-white-50">{{ promo.description }}</p>
+                <button class="btn btn-gradient btn-lg px-4">Découvrir</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
     </div>
   </section>
 
-  <!-- Bouton Ajouter un produit -->
-  <div class="add-product-container">
-    <button class="btn-add-product" (click)="goToAjoutProduit()">
-      <span class="plus-icon">+</span> Ajouter un produit
+  <!-- Ajouter Produit -->
+  <div class="d-flex justify-content-end mb-5">
+    <button class="btn btn-gradient-danger btn-lg d-flex align-items-center gap-2 px-4 py-3 fw-bold"
+      (click)="goToAjoutProduit()">
+      <span class="fs-4">+</span> Ajouter un produit
     </button>
   </div>
 
   <!-- Produits Classiques -->
-  <section class="products-section mt-4">
+  <section class="mb-5">
     <h2 class="section-title">🛍️ Produits Classiques</h2>
-    <div class="product-grid">
-      <div class="product-card" *ngFor="let p of produitsClassiques">
-        <div class="product-image-container">
-          <img [src]="p.imageUrl" class="product-image" [alt]="p.nom">
-          <button class="details-btn" (click)="voirDetails(p)">
-            <span class="material-icons">visibility</span>
-          </button>
-        </div>
-        <div class="product-info">
-          <h3 class="product-name">{{ p.nom }}</h3>
-          <p class="product-price">{{ p.prixFixe }} DT</p>
-          <button class="add-to-cart-btn" (click)="onAddToCart(p)">
-            Ajouter au panier
-          </button>
+
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-4 col-xl-3" *ngFor="let p of Classiques">
+        <div class="product-card border-primary">
+
+          <div class="product-image-container">
+            <img [src]="getFirstImage(p)" class="w-100 h-100 object-fit-cover" [alt]="p.nom">
+
+            <div class="product-actions">
+              <button class="icon-btn-transparent" (click)="voirDetails(p)" matTooltip="Voir détails">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button class="icon-btn-transparent" (click)="toggleFavori(p.id)" [class.text-danger]="estFavori(p.id)"
+                matTooltip="Favoris">
+                <mat-icon>{{ estFavori(p.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-3 d-flex flex-column">
+            <h5 class="fw-bold mb-2">{{ p.nom }}</h5>
+            <p class="text-primary fw-bold fs-5 mb-3">{{ p.prixFixe }} DT</p>
+
+            <button class="btn btn-gradient w-100 mt-auto d-flex align-items-center justify-content-center gap-2 py-2"
+              (click)="onAddToCart(p)">
+              <mat-icon>shopping_cart</mat-icon> Ajouter au panier
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
   </section>
 
   <!-- Produits Enchères -->
-  <section class="products-section mt-5">
+  <section>
     <h2 class="section-title">📣 Produits en Enchère</h2>
-    <div class="product-grid">
-      <div class="product-card" *ngFor="let p of produitsEncheres">
-        <div class="product-image-container">
-          <img [src]="p.imageUrl" class="product-image" [alt]="p.nom">
-          <button class="details-btn" (click)="voirDetails(p)">
-            <span class="material-icons">visibility</span>
-          </button>
-        </div>
-        <div class="product-info">
-          <h3 class="product-name">{{ p.nom }}</h3>
-          <p class="product-price text-warning">À partir de : {{ p.prixDepart }} DT</p>
-          <p class="product-date text-muted">Du {{ p.dateDebut | date }} au {{ p.dateFin | date }}</p>
-          <button class="add-to-cart-btn" (click)="onAddToCart(p)">
-            Ajouter au panier
-          </button>
+
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-4 col-xl-3" *ngFor="let p of Encheres">
+        <div class="product-card border-danger">
+
+          <div class="product-image-container">
+            <img [src]="getFirstImage(p)" class="w-100 h-100 object-fit-cover" [alt]="p.nom">
+
+            <div class="product-actions">
+              <button class="icon-btn-transparent" (click)="voirDetails(p)" matTooltip="Voir détails">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button class="icon-btn-transparent" (click)="toggleFavori(p.id)" [class.text-danger]="estFavori(p.id)"
+                matTooltip="Favoris">
+                <mat-icon>{{ estFavori(p.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-3 d-flex flex-column">
+            <h5 class="fw-bold mb-2">{{ p.nom }}</h5>
+            <p class="small text-muted mb-2">
+              Du {{ p.dateDebut | date:'dd/MM/yyyy HH:mm' }}<br>
+              au {{ p.dateFin | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+            <p class="text-danger fw-bold mb-3 d-flex align-items-center gap-2">
+              <mat-icon>schedule</mat-icon> {{ getTempsRestant(p.dateFin || '') }}
+            </p>
+
+            <button class="btn btn-gradient w-100 mt-auto d-flex align-items-center justify-content-center gap-2 py-2"
+              (click)="onAddToCart(p)">
+              <mat-icon>shopping_cart</mat-icon> Ajouter au panier
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
   </section>
+
 </main>

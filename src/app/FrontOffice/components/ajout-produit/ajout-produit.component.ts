@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProduitService, ProduitDTO } from 'src/app/services/produit.service';
-import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+
+interface ImagePreview {
+  url: string;
+  file: File;
+}
 
 @Component({
   selector: 'app-ajout-produit',
@@ -14,7 +18,7 @@ export class AjoutProduitComponent implements OnInit {
   produitForm: FormGroup;
   isClassique = true;
   isEnchere = false;
-  imagePreview: string | null = null;
+  imagePreviews: ImagePreview[] = [];
   dragOver = false;
 
   categories = [
@@ -36,11 +40,11 @@ export class AjoutProduitComponent implements OnInit {
       description: ['', [Validators.required, Validators.maxLength(500)]],
       typeProduit: ['CLASSIQUE', Validators.required],
       categorie: [null, Validators.required],
-      prixFixe: [null],    // Validators ajoutés dynamiquement
-      prixDepart: [null],  // Validators ajoutés dynamiquement
-      dateDebut: [''],     // Validators ajoutés dynamiquement
-      dateFin: [''],       // Validators ajoutés dynamiquement
-      imageUrl: ['']
+      prixFixe: [null],
+      prixDepart: [null],
+      dateDebut: [''],
+      dateFin: [''],
+      images: [[]]
     });
   }
 
@@ -60,16 +64,10 @@ export class AjoutProduitComponent implements OnInit {
     });
 
     this.onTypeChange();
-
-    // Pour debug validité
-    this.produitForm.statusChanges.subscribe(status => {
-      console.log('Statut formulaire:', status);
-    });
   }
 
   onTypeChange(): void {
     const type = this.produitForm.get('typeProduit')?.value;
-
     this.isClassique = type === 'CLASSIQUE';
     this.isEnchere = type === 'ENCHERE';
 
@@ -93,45 +91,60 @@ export class AjoutProduitComponent implements OnInit {
       this.produitForm.get('prixFixe')?.setValue(null, { emitEvent: false });
     }
 
-    // Update validity after validators changed
-    Object.keys(this.produitForm.controls).forEach(controlName => {
-      this.produitForm.get(controlName)?.updateValueAndValidity({ emitEvent: false });
-    });
+    // Update validity
+    this.produitForm.get('prixFixe')?.updateValueAndValidity();
+    this.produitForm.get('prixDepart')?.updateValueAndValidity();
+    this.produitForm.get('dateDebut')?.updateValueAndValidity();
+    this.produitForm.get('dateFin')?.updateValueAndValidity();
   }
 
   onImageSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file && this.isValidImage(file)) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result as string;
-        this.produitForm.patchValue({ imageUrl: this.imagePreview });
-      };
-      reader.readAsDataURL(file);
-    } else {
-      this.toastr.error('Format non supporté ou taille > 2MB (JPG, PNG)');
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (this.isValidImage(file)) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            this.imagePreviews.push({
+              url: reader.result as string,
+              file: file
+            });
+            this.updateImagesFormControl();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          this.toastr.error('Format non supporté ou taille > 2MB (JPG, PNG)');
+        }
+      }
     }
   }
 
-  removeImage(): void {
-    this.imagePreview = null;
-    this.produitForm.patchValue({ imageUrl: null });
+  removeImage(index: number): void {
+    this.imagePreviews.splice(index, 1);
+    this.updateImagesFormControl();
   }
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
     this.dragOver = false;
     if (event.dataTransfer?.files.length) {
-      const file = event.dataTransfer.files[0];
-      if (this.isValidImage(file)) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.imagePreview = reader.result as string;
-          this.produitForm.patchValue({ imageUrl: this.imagePreview });
-        };
-        reader.readAsDataURL(file);
-      } else {
-        this.toastr.error('Format non supporté ou taille > 2MB (JPG, PNG)');
+      const files = event.dataTransfer.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (this.isValidImage(file)) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            this.imagePreviews.push({
+              url: reader.result as string,
+              file: file
+            });
+            this.updateImagesFormControl();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          this.toastr.error('Format non supporté ou taille > 2MB (JPG, PNG)');
+        }
       }
     }
   }
@@ -146,6 +159,12 @@ export class AjoutProduitComponent implements OnInit {
     this.dragOver = false;
   }
 
+  private updateImagesFormControl(): void {
+    this.produitForm.patchValue({
+      images: this.imagePreviews.map(img => img.url)
+    });
+  }
+
   onSubmit(): void {
     if (this.produitForm.invalid) {
       this.markFormGroupTouched(this.produitForm);
@@ -156,14 +175,15 @@ export class AjoutProduitComponent implements OnInit {
     const formValue = this.produitForm.value;
 
     const produit: ProduitDTO = {
+      id: 0, // L'ID sera géré par le backend
       nom: formValue.nom,
       description: formValue.description,
       typeProduit: formValue.typeProduit,
       prixFixe: formValue.typeProduit === 'CLASSIQUE' ? formValue.prixFixe : undefined,
       prixDepart: formValue.typeProduit === 'ENCHERE' ? formValue.prixDepart : undefined,
-      dateDebut: formValue.typeProduit === 'ENCHERE' ? formatDate(formValue.dateDebut, 'yyyy-MM-dd', 'en-US') : undefined,
-      dateFin: formValue.typeProduit === 'ENCHERE' ? formatDate(formValue.dateFin, 'yyyy-MM-dd', 'en-US') : undefined,
-      imageUrl: formValue.imageUrl,
+      dateDebut: formValue.typeProduit === 'ENCHERE' ? formValue.dateDebut : undefined,
+      dateFin: formValue.typeProduit === 'ENCHERE' ? formValue.dateFin : undefined,
+      imageUrls: formValue.images,
       categorie: formValue.categorie
     };
 
@@ -189,11 +209,17 @@ export class AjoutProduitComponent implements OnInit {
       prixDepart: null,
       dateDebut: '',
       dateFin: '',
-      imageUrl: ''
+      images: []
     });
-    this.imagePreview = null;
+    this.imagePreviews = [];
     this.onTypeChange();
   }
+  getFirstImage(produit: ProduitDTO): string {
+  // Retourne la première image ou une image par défaut
+  return produit.imageUrls && produit.imageUrls.length > 0 
+    ? produit.imageUrls[0] 
+    : 'assets/images/default-product.png';
+}
 
   cancel(): void {
     if (confirm('Voulez-vous vraiment annuler ? Les modifications non enregistrées seront perdues.')) {

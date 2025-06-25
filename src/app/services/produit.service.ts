@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface ProduitDTO {
+  id: number;
   nom: string;
   description: string;
   typeProduit: 'CLASSIQUE' | 'ENCHERE';
@@ -10,7 +11,8 @@ export interface ProduitDTO {
   prixDepart?: number;
   dateDebut?: string;
   dateFin?: string;
-  imageUrl?: string;
+    imageUrls: string[];  // Changé de imageUrl à imageUrls (tableau)
+
   categorie: number;
 
 }
@@ -35,10 +37,13 @@ ajouterProduit(produit: ProduitDTO): Observable<any> {
 
   return this.http.post(`${this.baseUrl}/ajoutProduit`, produit, { headers });
 }
-getAllProduits(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.baseUrl}/all`);
-}
+  getAllProduits(): Observable<ProduitDTO[]> {
+    return this.http.get<ProduitDTO[]>(`${this.baseUrl}`);
+  }
 
+  getProduitsParType(type: 'CLASSIQUE' | 'ENCHERE'): Observable<ProduitDTO[]> {
+    return this.http.get<ProduitDTO[]>(`${this.baseUrl}/type/${type}`);
+  }
 
 
 }

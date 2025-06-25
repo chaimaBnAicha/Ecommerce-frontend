@@ -136,4 +136,15 @@
       }
     }
   }
+}.product-image-gallery {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.image-container img {
+  height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
 }

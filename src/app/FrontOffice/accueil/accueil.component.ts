@@ -1,21 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProduitService } from '../../services/produit.service';
+import { ProduitService, ProduitDTO } from '../../services/produit.service';
 import { ProduitDetailsDialogComponent } from '../produit-details-dialog/produit-details-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-interface Product {
-  id: number;
-  nom: string;
-  description: string;
-  imageUrl: string;
-  prixFixe?: number;
-  prixDepart?: number;
-  dateDebut?: string;
-  dateFin?: string;
-  typeProduit: 'PRODUITCLASSIQUE' | 'PRODUITENCHERE';
-}
-
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 interface Promo {
   id: number;
   title: string;
@@ -29,10 +17,11 @@ interface Promo {
   styleUrls: ['./accueil.component.scss']
 })
 export class AccueilComponent implements OnInit {
-  produitsClassiques: Product[] = [];
-  produitsEncheres: Product[] = [];
-  cart: Product[] = [];
 
+  Classiques: ProduitDTO[] = [];
+  Encheres: ProduitDTO[] = [];
+  cart: ProduitDTO[] = [];
+  favoris: number[] = [];
   promos: Promo[] = [
     {
       id: 1,
@@ -44,44 +33,69 @@ export class AccueilComponent implements OnInit {
       id: 2,
       title: 'Électronique',
       description: 'Offres spéciales sur les appareils électroniques.',
-      image: 'assets/images/promo_electronique.jpg'
+      image: 'assets/images/eclectronique.png!sw800'
     }
   ];
 
   constructor(
     private router: Router,
     private produitService: ProduitService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+        private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.chargerProduits();
+    setInterval(() => {
+      this.Encheres = [...this.Encheres];
+    }, 1000);
   }
 
-chargerProduits(): void {
-  this.produitService.getAllProduits().subscribe({
-    next: (data: Product[]) => {
-      console.log('Produits reçus:', data);
-      const types = Array.from(new Set(data.map(p => p.typeProduit)));
-      console.log('Types trouvés:', types);
+  chargerProduits(): void {
+    this.produitService.getProduitsParType('CLASSIQUE').subscribe({
+      next: (data) => this.Classiques = data,
+      error: (err) => console.error('Erreur chargement Classiques', err)
+    });
 
-      this.produitsClassiques = data.filter(p => p.typeProduit === 'PRODUITCLASSIQUE');
-      this.produitsEncheres = data.filter(p => p.typeProduit === 'PRODUITENCHERE');
-
-      console.log('Classiques:', this.produitsClassiques);
-      console.log('Enchères:', this.produitsEncheres);
-    },
-    error: (err) => console.error('Erreur chargement produits:', err)
-  });
-}
-
-
-
-  goToAjoutProduit(): void {
-    this.router.navigate(['/ajouter-produit']);
+    this.produitService.getProduitsParType('ENCHERE').subscribe({
+      next: (data) => this.Encheres = data,
+      error: (err) => console.error('Erreur chargement Enchères', err)
+    });
+  }
+  
+  chargerFavoris(): void {
+    // Charger depuis le localStorage ou une API
+    const fav = localStorage.getItem('favoris');
+    this.favoris = fav ? JSON.parse(fav) : [];
   }
 
-  voirDetails(produit: Product): void {
+  private ensureImageArray(images: any): string[] {
+    if (Array.isArray(images)) return images;
+    if (typeof images === 'string') return [images];
+    return ['assets/images/default-product.png'];
+  }
+
+  toggleFavori(produitId: number): void {
+    const index = this.favoris.indexOf(produitId);
+    if (index === -1) {
+      this.favoris.push(produitId);
+      this.snackBar.open('Ajouté aux favoris', 'Fermer', { duration: 2000 });
+    } else {
+      this.favoris.splice(index, 1);
+      this.snackBar.open('Retiré des favoris', 'Fermer', { duration: 2000 });
+    }
+    localStorage.setItem('favoris', JSON.stringify(this.favoris));
+  }
+
+  estFavori(produitId: number): boolean {
+    return this.favoris.includes(produitId);
+  }
+
+  getFirstImage(produit: ProduitDTO): string {
+    return produit.imageUrls[0];
+  }
+
+  voirDetails(produit: ProduitDTO): void {
     this.dialog.open(ProduitDetailsDialogComponent, {
       width: '100%',
       maxWidth: '100vw',
@@ -93,8 +107,37 @@ chargerProduits(): void {
     });
   }
 
-  onAddToCart(p: Product): void {
+  goToAjoutProduit(): void {
+    this.router.navigate(['/ajouter-produit']);
+  }
+
+  
+
+  onAddToCart(p: ProduitDTO): void {
     this.cart.push(p);
-    // Logique panier à compléter
+    console.log('Ajouté au panier', p);
+  }
+
+  getTempsRestant(dateFin: string): string {
+    const fin = new Date(dateFin).getTime();
+    const maintenant = Date.now();
+    const diff = fin - maintenant;
+
+    if (diff <= 0) return 'Terminé';
+
+    const heures = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secondes = Math.floor((diff % (1000 * 60)) / 1000);
+
+    return `${heures}h ${minutes}m ${secondes}s`;
+  }
+
+  scrollLeft(container: HTMLElement): void {
+    container.scrollLeft -= 150;
+  }
+
+  scrollRight(container: HTMLElement): void {
+    container.scrollLeft += 150;
   }
 }
+

@@ -6,7 +6,7 @@ interface Product {
   id: number;
   nom: string;
   description: string;
-  imageUrl: string;
+    imageUrls: string[];  // Changé de imageUrl à imageUrls (tableau)
   prixFixe?: number;
   prixDepart?: number;
   typeProduit: 'CLASSIQUE' | 'ENCHERE';
